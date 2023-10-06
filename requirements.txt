@@ -1,0 +1,12 @@
+altair
+graphviz
+gspread
+matplotlib
+networkx
+numpy
+pandas
+pingouin
+scikit-learn
+scipy
+seaborn
+sklearn
