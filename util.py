@@ -120,9 +120,12 @@ def calculate_distances(graph):
     graph['x_j'] = graph.x + np.random.normal(0,0.2,graph.x.shape)
     graph['y_j'] = graph.y + np.random.normal(0,0.2,graph.y.shape)
     graph['uid'] = range(graph.shape[0])
-
+    
+    # Solve this using maximum weighted matching. 
+    # See https://math.stackexchange.com/questions/972936/hungarian-algorithm-on-symmetric-matrix.
     distances = pairwise_distances(graph[['x', 'y']])
-    distances *= np.tri(*distances.shape)
+    distances *= np.tri(*distances.shape) # Set upper triangle and diagonal to zero
+
     return distances
 
 def construct_graph(distances):
@@ -157,8 +160,8 @@ def get_distance_plot(df, distances, G):
     selection=alt.selection_multi(fields=['Email Address'], bind='legend')
 
     base = alt.Chart(source).mark_circle(size=100).encode(
-        x=alt.X('x_j', scale=alt.Scale(domain=[-5, 5])),
-        y=alt.Y('y_j', scale=alt.Scale(domain=[-7, 5])),
+        x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8]), title="X Axis"),
+        y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8]), title="Y Axis"),
         color='group:N',
         tooltip=['Email Address'],
     ).properties(width=600, height=600)
@@ -171,7 +174,65 @@ def get_distance_plot(df, distances, G):
 
     # alt.layer(base, lines).interactive().save('distances.html')
     # alt.layer(base, lines).interactive().save('distances.json')
-    return alt.layer(base, lines).interactive()
+    return alt.layer(base, lines).configure_axis(
+        labelFontSize=14,  # Font size for axis labels
+        titleFontSize=14   # Font size for axis titles
+    ).configure_legend(
+        titleFontSize=14,  # Font size for legend title
+        labelFontSize=14   # Font size for legend labels
+    ).configure_text(fontSize=14).interactive()
+
+
+def get_post_distance_plot(df, distances, G, post_df):
+    df_copy = df.copy()
+    df_copy.reset_index(inplace=True)
+    
+    post_df_copy = post_df.copy()
+    post_df_copy.reset_index(inplace=True)
+
+    M = matching.max_weight_matching(G)
+    c = 0
+    for pair in M:
+        for individual in pair:
+            df_copy.loc[individual, 'group'] = c
+        c += 1
+
+    merged = post_df_copy.merge(df_copy[['Email Address', 'group']], on='Email Address', how='left')
+        
+    source = df_copy
+
+    selection=alt.selection_multi(fields=['Email Address'], bind='legend')
+
+    base = alt.Chart(source).mark_circle(size=100).encode(
+        x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8]), title="Individual cognition ⟺ Social cognition"),
+        y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8]), title="As a skill ⟺ As a method"),
+        color='group:N',
+        tooltip=['Email Address'],
+    ).properties(width=600, height=600)
+
+    lines = base.mark_line().encode(
+        x='x_j',
+        y='y_j',
+        detail='group',
+    )
+
+    points = alt.Chart(merged).mark_point(size=200).encode(
+        x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8])),
+        y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8])),
+        color='group:N',
+        tooltip=['Email Address'],
+        shape=alt.value('cross')  # Setting shape to 'cross' for X shape
+    )
+
+    # alt.layer(base, lines).interactive().save('distances.html')
+    # alt.layer(base, lines).interactive().save('distances.json')
+    return alt.layer(base, lines, points).configure_axis(
+        labelFontSize=14,  # Font size for axis labels
+        titleFontSize=14   # Font size for axis titles
+    ).configure_legend(
+        titleFontSize=14,  # Font size for legend title
+        labelFontSize=14   # Font size for legend labels
+    ).configure_text(fontSize=14).interactive()
 
 
 def get_max_distance_pairs(df, distances, G):
