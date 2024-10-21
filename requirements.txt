@@ -9,4 +9,5 @@ pingouin
 scikit-learn
 scipy
 seaborn
-sklearn
+jupyterlab
+typing-extensions
