@@ -17,9 +17,9 @@ import networkx.algorithms.matching as matching
 import gspread
 import altair as alt
 
-PRE_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1FxayB3xC4o_W26afPTlXetfGmlOxfIXx2GHhe1cuneE/edit?usp=sharing"
+PRE_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1BhuSGSFIVtXKUlTlCRnXqc4IJ_SZ_ZtLwwROywmmo5g/edit?usp=sharing"
 # PRE_ONLINE_URL = "https://docs.google.com/spreadsheets/d/1JTrA3Ce3pihrd_Yq0rUodbS2_IM90Tdd0mPIaBQKLPY/edit?usp=sharing"
-POST_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1013OZ4PMsIY-kB6Zh02NjkMim7EL4vP07g8ff21hzRk/edit?usp=sharing"
+POST_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1b2WZ3UQLg7PnwsPDAivsImImCf3cfj5rwFWxy5o_UiE/edit?usp=sharing"
 # POST_ONLINE_URL = "https://docs.google.com/spreadsheets/d/1mTMw1rWoH629ISJ5mfp-AQm3sxl3StYg4OuZVcIFGJM/edit?usp=sharing"
 DEMO_URL = "https://docs.google.com/spreadsheets/d/1mvJqVmvFpRP4w7-5RgVPuaflW2ZRLlDC2zWlBth1vcs/edit?usp=sharing"
 
