@@ -17,14 +17,14 @@ import networkx.algorithms.matching as matching
 import gspread
 import altair as alt
 
-PRE_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1BhuSGSFIVtXKUlTlCRnXqc4IJ_SZ_ZtLwwROywmmo5g/edit?usp=sharing"
+PRE_INPERSON_URL = "https://docs.google.com/spreadsheets/d/13wbbMcV-9WqpIWo6N6OxzlABndzM0K4GSxfwReRH9co/edit?usp=sharing"
 # PRE_ONLINE_URL = "https://docs.google.com/spreadsheets/d/1JTrA3Ce3pihrd_Yq0rUodbS2_IM90Tdd0mPIaBQKLPY/edit?usp=sharing"
-POST_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1b2WZ3UQLg7PnwsPDAivsImImCf3cfj5rwFWxy5o_UiE/edit?usp=sharing"
+POST_INPERSON_URL = "https://docs.google.com/spreadsheets/d/1oLHXpqg_OYobEBCEd0JbGrvG4pbkpslYS2UU701PpPY/edit?usp=sharing"
 # POST_ONLINE_URL = "https://docs.google.com/spreadsheets/d/1mTMw1rWoH629ISJ5mfp-AQm3sxl3StYg4OuZVcIFGJM/edit?usp=sharing"
-DEMO_URL = "https://docs.google.com/spreadsheets/d/1mvJqVmvFpRP4w7-5RgVPuaflW2ZRLlDC2zWlBth1vcs/edit?usp=sharing"
+# DEMO_URL = "https://docs.google.com/spreadsheets/d/1mvJqVmvFpRP4w7-5RgVPuaflW2ZRLlDC2zWlBth1vcs/edit?usp=sharing"
 
 
-def load_worksheet(url, worksheet="Form Responses 1"):
+def load_worksheet(url, worksheet="Form responses 1"):
     gc = gspread.service_account("service_account.json")
 
     # Spreadsheet has been shared with email specified in service_account.json
@@ -157,13 +157,13 @@ def get_distance_plot(df, distances, G):
 
     source = df_copy
 
-    selection=alt.selection_multi(fields=['Email Address'], bind='legend')
+    selection=alt.selection_multi(fields=['Email address'], bind='legend')
 
     base = alt.Chart(source).mark_circle(size=100).encode(
         x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8]), title="X Axis"),
         y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8]), title="Y Axis"),
         color='group:N',
-        tooltip=['Email Address'],
+        tooltip=['Email address'],
     ).properties(width=600, height=600)
 
     lines = base.mark_line().encode(
@@ -197,17 +197,17 @@ def get_post_distance_plot(df, distances, G, post_df):
             df_copy.loc[individual, 'group'] = c
         c += 1
 
-    merged = post_df_copy.merge(df_copy[['Email Address', 'group']], on='Email Address', how='left')
+    merged = post_df_copy.merge(df_copy[['Email address', 'group']], on='Email address', how='left')
         
     source = df_copy
 
-    selection=alt.selection_multi(fields=['Email Address'], bind='legend')
+    selection=alt.selection_multi(fields=['Email address'], bind='legend')
 
     base = alt.Chart(source).mark_circle(size=100).encode(
         x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8]), title="Individual cognition ⟺ Social cognition"),
         y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8]), title="As a skill ⟺ As a method"),
         color='group:N',
-        tooltip=['Email Address'],
+        tooltip=['Email address'],
     ).properties(width=600, height=600)
 
     lines = base.mark_line().encode(
@@ -220,7 +220,7 @@ def get_post_distance_plot(df, distances, G, post_df):
         x=alt.X('x_j', scale=alt.Scale(domain=[-8, 8])),
         y=alt.Y('y_j', scale=alt.Scale(domain=[-8, 8])),
         color='group:N',
-        tooltip=['Email Address'],
+        tooltip=['Email address'],
         shape=alt.value('cross')  # Setting shape to 'cross' for X shape
     )
 
@@ -240,7 +240,7 @@ def get_max_distance_pairs(df, distances, G):
     max_distance_pairs = []
     for entry in M:
         # print(f'Pair {df.iloc[min(entry)]["Email address"]} with {df.iloc[max(entry)]["Email address"]}')
-        max_distance_pairs.append([df.iloc[min(entry)]["Email Address"], df.iloc[max(entry)]["Email Address"]])
+        max_distance_pairs.append([df.iloc[min(entry)]["Email address"], df.iloc[max(entry)]["Email address"]])
     return max_distance_pairs
 
 
