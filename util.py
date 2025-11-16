@@ -36,24 +36,24 @@ def load_worksheet(url, worksheet="Form responses 1"):
 
 # Functions to assign the coordinates from the answers
 def process_question_teams(answer:str) -> list:
-    if answer == 'Yes, it might force them to deepen the contents of my lecture':
-        return [2, -2]
-
-    if answer == 'Yes, even if they won’t necessarily learn more, they might at least learn to work together':
-        return [2, -2]
-
-    if answer == 'No, they can learn to work in teams in many activities outside school':
-        return [2, -2]
-
-    if answer == 'No, teamwork takes too much time; I have to move faster in the curriculum':
+    if answer == 'Yes, but only for topics that are easy to learn':
         return [-2, 2]
+
+    if answer == 'Yes, because it is important to learn to work together':
+        return [2, -2]
+
+    if answer == 'No, because my course is mostly about manual skills but I hope they work in teams for conceptual courses':
+        return [0, -2]
+
+    if answer == 'No, because teamwork takes too much time; I have to move faster in the curriculum':
+        return [-1, 3]
 
 
 def process_question_size(answer:str) -> list:
     if answer == 'Teams of 3, because the third can kind of arbitrate the disagreements between the two other ones, so the team would work better':
         return [-1, -1]
 
-    if answer == 'Teams of 2, because with larger teams, there is often one person that does not contribute much, which is unfair for the two other ones':
+    if answer == 'Teams of 2, because with larger teams, there is often one person that does not contribute much, which is unfair for the other ones':
         return [2, -2]
 
     if answer == 'Teams of 5, so that I can detect which students take leadership':
@@ -64,16 +64,16 @@ def process_question_size(answer:str) -> list:
 
 
 def process_question_composition(answer:str) -> list:
-    if answer == 'Two students with different viewpoints so that they produce multiple solutions':
+    if answer == 'Students with different viewpoints on the topic, so they argue about the best solution':
         return [1, -2]
 
-    if answer == 'Two students with a different backgrounds, so that they get used to handle diversity':
+    if answer == 'Students with different backgrounds (e.g., physics and psychology), so that they get used to handling diversity':
         return [2, -2]
 
-    if answer == 'Two students with the same level, otherwise the better students will waste time with the weaker one':
+    if answer == 'Students with the same level of knowledge, otherwise the better students will waste time':
         return [-1, 2]
 
-    if answer == 'Two students with different levels, so that one develops the skills of helping other students':
+    if answer == 'Students with different levels, so that the more knowledgeable one develops the skills of helping others':
         return [2, -2]
 
 
@@ -84,19 +84,19 @@ def process_question_argue(answer:str) -> list:
     if answer == 'Discuss with them to see if some opinions are scientifically incorrect':
         return [-3, 2]
 
-    if answer == 'Nothing, I will ask them to less loud then I will check who wins the argumentation':
+    if answer == 'Nothing, I will ask them to be less loud and show respect to each other':
         return [-2, -2]
 
-    if answer == 'Nothing, it may force them to deepen their understanding of the task':
+    if answer == 'Nothing, it may lead them to deepen their understanding of the task':
         return [2, 2]
 
 
 def calculate_distances(graph):
     # Assign coordinates
     graph['team_xy'] = graph['If you were a school teacher, would you ask students to work in teams? Pick what you might decide and why.'].apply(process_question_teams)
-    graph['size_xy'] = graph['If you would decide anyway to make teams, which size of the teams would you choose?'].apply(process_question_size)
+    graph['size_xy'] = graph['If you would decide to make teams, which size of the teams would you choose?'].apply(process_question_size)
     graph['composition_xy'] = graph['Let’s say that you finally decide to make teams of 2, what would be the best team composition?'].apply(process_question_composition)
-    graph['argue_xy'] = graph['If during their teamwork, three students start to argue loudly what would you do?'].apply(process_question_argue)
+    graph['argue_xy'] = graph['If during their teamwork, three students start to argue loudly, what would you do?'].apply(process_question_argue)
 
     # Separate x and y coordinates
     graph['team_x'] = graph['team_xy'].apply(lambda x: x[0])
